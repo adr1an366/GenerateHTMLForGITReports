@@ -59,7 +59,6 @@ public class ProcessedReport {
                     break;
                 }
             }
-            System.out.println(i + " " + line);
             if (line.contains("commit") && ('c' == line.charAt(i))) {
 
                 isText = false;

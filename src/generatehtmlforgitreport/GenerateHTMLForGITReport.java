@@ -5,7 +5,9 @@
  */
 package generatehtmlforgitreport;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 import generatehtmlforgitreport.ProcessedReport.Commit;
+import generatehtmlforgitreport.templates.TemplateChooser;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -59,7 +61,8 @@ public class GenerateHTMLForGITReport {
 
         try {
             ProcessedReport report = new ProcessedReport(f);
-            InputStream templateStream = GenerateHTMLForGITReport.class.getResourceAsStream("./templates/template.html");
+            InputStream templateStream = new TemplateChooser().getTemplateUrl().openStream();
+            System.out.println(templateStream);
             BufferedReader br = new BufferedReader(new InputStreamReader(templateStream));
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFile)));
             String l;
