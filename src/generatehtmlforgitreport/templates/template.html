@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+<style>
+th, td {
+  border: 1px solid black;
+}
+th {
+background-color: gray;
+}
+h3 {
+color: gray;
+}
+</style>
+</head>
+<body>
+<h1 style="text-align:center;">${project_name}</h1>
+<h2>Number of commits by author:</h2>
+${authors_commits}
+<h2>Total commit count: ${number_of_commits} commits</h2>
+<h2>Commits</h2>
+<table style="width:100%" >
+<tr>
+<th>Branch</th>
+<th>Commit</th>
+<th>Author</th>
+<th>Date</th>
+<th>Merge</th>
+<th>Text</th>
+</tr>
+  <col width="20">
+  <col width="60">
+  <col width="80">
+  <col width="60">
+  <col width="40">
+  <col width="80">
+${table_body}
+</table>
+</body>
+</html>
