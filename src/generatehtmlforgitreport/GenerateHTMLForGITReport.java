@@ -62,7 +62,6 @@ public class GenerateHTMLForGITReport {
         try {
             ProcessedReport report = new ProcessedReport(f);
             InputStream templateStream = new TemplateChooser().getTemplateUrl().openStream();
-            System.out.println(templateStream);
             BufferedReader br = new BufferedReader(new InputStreamReader(templateStream));
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFile)));
             String l;
