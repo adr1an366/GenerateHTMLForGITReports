@@ -7,6 +7,7 @@ package generatehtmlforgitreport;
 
 import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 import generatehtmlforgitreport.ProcessedReport.Commit;
+import generatehtmlforgitreport.beans.Author;
 import generatehtmlforgitreport.templates.TemplateChooser;
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -18,8 +19,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,8 +72,15 @@ public class GenerateHTMLForGITReport {
             String l;
             while ((l = br.readLine()) != null) {
                 if (l.contains("${authors_commits}")) {
-                    HashMap<String, Integer> numberOfCommitsByAuthor = report.getNumberOfCommits();
-                    for (String author : numberOfCommitsByAuthor.keySet()) {
+                    HashMap<Author, Integer> numberOfCommitsByAuthor = report.getNumberOfCommits();
+                    Set<Author> keySet = numberOfCommitsByAuthor.keySet();
+                    ArrayList<Author> authors = new ArrayList<>();
+                    for (Author a : keySet) {
+                        authors.add(a);
+                    }
+                    Collections.sort(authors);
+                    Collections.reverse(authors);
+                    for (Author author : authors) {
                         bw.write("<h3><label><font color=\"" + report.getColors().get(author) + "\">\u25A0</font></label> " + author + ": " + numberOfCommitsByAuthor.get(author) + "commits (" + String.format("%.2f", 100 * ((float) numberOfCommitsByAuthor.get(author)) / report.getCOMMITS().size()) + "%)<label><font color=\"" + report.getColors().get(author) + "\">\u25A0</font></label></h3>\n");
                     }
                 } else if (l.contains("${table_body}")) {

@@ -5,6 +5,7 @@
  */
 package generatehtmlforgitreport;
 
+import generatehtmlforgitreport.beans.Author;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,15 +24,16 @@ import java.util.Random;
 public class ProcessedReport {
 
     private ArrayList<Commit> COMMITS = new ArrayList<>();
-    private HashMap<String, Integer> NumberOfCommits = new HashMap<>();
-    private HashMap<String, String> Colors = new HashMap<>();
+    private HashMap<Author, Integer> NumberOfCommits = new HashMap<>();
+    private HashMap<Author, String> Colors = new HashMap<>();
     private static final String[] COLORS = new String[]{"#fffac8", "#fabebe", "#e6beff", "#ffd8b1", "#bfef45", "#f58231", "#e6194B", "#ffe119", "#aaffc3", "#3cb44b", "#42d4f4", "#4363d8", "#911eb4", "#f032e6", "#800000", "#9A6324", "#808000", "#469990"};
+    private ArrayList<Author> TOTAL_AUTHORS = new ArrayList<>();
 
-    public HashMap<String, String> getColors() {
+    public HashMap<Author, String> getColors() {
         return Colors;
     }
 
-    public HashMap<String, Integer> getNumberOfCommits() {
+    public HashMap<Author, Integer> getNumberOfCommits() {
         return NumberOfCommits;
     }
 
@@ -70,7 +72,19 @@ public class ProcessedReport {
                 }
                 commit.setCommit_hash(line.split("commit")[1].trim());
             } else if (line.contains("Author:") && ('A' == line.charAt(i))) {
-                commit.setAuthor(line.split("Author:")[1].trim().replace("<", "[").replace(">", "]"));
+                Author author = new Author(line.split("Author:")[1].trim());
+                boolean contains = false;
+                for (Author a : TOTAL_AUTHORS) {
+                    if (a.equals(author)) {
+                        author = a;
+                        contains=true;
+                        break;
+                    }
+                }
+                if(!contains){
+                    TOTAL_AUTHORS.add(author);
+                }
+                commit.setAuthor(author);
                 Integer commitCount = NumberOfCommits.get(commit.getAuthor());
                 if (commitCount != null) {
                     commitCount++;
@@ -109,7 +123,8 @@ public class ProcessedReport {
 
     public class Commit {
 
-        private String author, commit_hash, date, text = "", merge = "", branchTags = "";
+        private String commit_hash, date, text = "", merge = "", branchTags = "";
+        private Author author;
 
         public String getBranchTags() {
             return branchTags;
@@ -135,11 +150,11 @@ public class ProcessedReport {
             this.merge = merge;
         }
 
-        public String getAuthor() {
+        public Author getAuthor() {
             return author;
         }
 
-        public void setAuthor(String author) {
+        public void setAuthor(Author author) {
             this.author = author;
         }
 
